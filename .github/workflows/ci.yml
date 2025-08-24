@@ -21,4 +21,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: minagerges2310/to-do-list:latest
+          tags: mina2310
