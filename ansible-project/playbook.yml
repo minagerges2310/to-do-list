@@ -1,0 +1,44 @@
+---
+- name: Configure Amazon Linux VM and Install Docker
+  hosts: all
+  become: true
+  tasks:
+    - name: Update all packages using yum
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+
+    - name: Install yum-utils
+      ansible.builtin.yum:
+        name: yum-utils
+        state: present
+
+    - name: Add Docker yum repository
+      ansible.builtin.yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - x86_64
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        state: present
+
+    - name: Install Docker Engine and Docker Compose
+      ansible.builtin.yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+
+    - name: Start and enable the Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ec2-user to the docker group
+      ansible.builtin.user:
+        name: ec2-user # Changed from ubuntu
+        groups: docker
+        append: yes
