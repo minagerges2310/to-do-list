@@ -5,6 +5,9 @@ FROM node:18-alpine
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
+RUN apk add --no-cache curl
+
+
 # Copy package.json and package-lock.json for dependency caching
 COPY package*.json ./
 
@@ -15,7 +18,7 @@ RUN npm install
 COPY . .
 
 # Expose the port the application runs on
-EXPOSE 3000
+EXPOSE 4000
 
 # Set a non-root user for better security
 USER node
